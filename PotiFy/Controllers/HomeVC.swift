@@ -25,6 +25,27 @@ class HomeVC: UIViewController {
     var delegate: CenterVCDelegate?
     //centerDelegate var
     
+    //ViewDidload func
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        manager = CLLocationManager()
+        manager?.desiredAccuracy = kCLLocationAccuracyBest
+        manager?.startUpdatingLocation()
+        manager?.delegate = self
+        
+        
+        
+        checkLocationAuthStatus()
+        centerMapOnUserLocation()
+        mapView.delegate = self
+        //  checkLocationAuthStatus()
+        
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    
+    
     //functions
     func checkLocationAuthStatus() {
         if CLLocationManager.authorizationStatus() == .authorizedAlways {
@@ -36,6 +57,9 @@ class HomeVC: UIViewController {
             manager?.requestAlwaysAuthorization()
         }
     }
+    
+    
+    
     
     //func to center location
     func centerMapOnUserLocation() {
@@ -120,30 +144,7 @@ class HomeVC: UIViewController {
         centMapBtn.fadeTo(alphaValue: 0.0, withDuration: 0.2)
     }
     
-    //ViewDidload func
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        manager = CLLocationManager()
-        manager?.desiredAccuracy = kCLLocationAccuracyBest
-        manager?.startUpdatingLocation()
-        manager?.delegate = self 
-        
-        
-       /*
-        DataService.instance.REF_DRIVERS.observe(.value) { (snapshot) in
-            self.loadDriverAnnotationsFromFB()
-        }
-        
-        loadDriverAnnotationsFromFB()
-       */
-        checkLocationAuthStatus()
-        centerMapOnUserLocation()
-        mapView.delegate = self
-      //  checkLocationAuthStatus()
-        
-        // Do any additional setup after loading the view, typically from a nib.
-    }
+    
 
 
 }
@@ -162,13 +163,14 @@ extension HomeVC: MKMapViewDelegate {
             view = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
             view.image = UIImage(named: "driverAnnotation")
             return view
+            
         }
+        
         return nil
+        
     }
     
-    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
-        centMapBtn.fadeTo(alphaValue: 1.0, withDuration: 0.2)
-    }
+    
 }
 
 extension HomeVC: CLLocationManagerDelegate {
