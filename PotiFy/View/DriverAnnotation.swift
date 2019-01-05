@@ -9,12 +9,13 @@
 import Foundation
 import MapKit
 import UIKit
+import Firebase
 
 
 class DriverAnnotation: NSObject, MKAnnotation {
     
     
-    var coordinate: CLLocationCoordinate2D
+    dynamic var coordinate: CLLocationCoordinate2D
     var key: String
     
     init(coordinate: CLLocationCoordinate2D, withKey key: String) {

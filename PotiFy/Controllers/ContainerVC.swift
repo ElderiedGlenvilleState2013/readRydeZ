@@ -160,7 +160,7 @@ extension ContainerVC: CenterVCDelegate {
             }
         }
     }
-    
+   
     func shouldShowShadowForCenterViewController(_ status: Bool) {
         if true {
             centerController.view.layer.shadowOpacity = 0.6
@@ -168,6 +168,7 @@ extension ContainerVC: CenterVCDelegate {
             centerController.view.layer.shadowOpacity = 0.0
         }
     }
+ 
     
     func animateCenterPanelXPosition(targetPosition: CGFloat, completion: ((Bool)-> Void)! = nil) {
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 0.8, initialSpringVelocity: 0, options: .curveEaseInOut, animations: {
