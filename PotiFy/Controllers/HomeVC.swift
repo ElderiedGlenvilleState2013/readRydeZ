@@ -29,18 +29,18 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        loadDriverAnnotationsFromFB()
+        //loadDriverAnnotationsFromFB()
         
         manager = CLLocationManager()
         manager?.desiredAccuracy = kCLLocationAccuracyBest
         manager?.startUpdatingLocation()
         manager?.delegate = self
         
-        /*
+        
         DataService.instance.REF_DRIVERS.observe(.value) { (snapshot) in
             self.loadDriverAnnotationsFromFB()
         }
-        */
+        
         
         
         
@@ -83,8 +83,32 @@ class HomeVC: UIViewController {
                                 
                                 let annotation = DriverAnnotation(coordinate: driverCoordinate, withKey: driver.key)
                                 
-                                self.mapView.addAnnotation(annotation)
+                                var driverIsVisible: Bool {
+                                    return self.mapView.annotations.contains(where: { (annotation) -> Bool in
+                                        if let driverAnnotation = annotation as? DriverAnnotation {
+                                            if driverAnnotation.key == driver.key {
+                                                driverAnnotation.update(annotationPosition: driverAnnotation, withCoordinate: driverCoordinate)
+                                                return true
+                                            }
+                                        }
+                                        return false
+                                    })
+                                }
+                                if !driverIsVisible {
+                                    self.mapView.addAnnotation(annotation)
+                                }
                             }
+                        } else {
+                            for annotation in self.mapView.annotations {
+                                if annotation.isKind(of: DriverAnnotation.self) {
+                                    if let annotation = annotation as? DriverAnnotation {
+                                        if annotation.key == driver.key {
+                                            self.mapView.removeAnnotation(annotation)
+                                        }
+                                    }
+                                }
+                            }
+                            
                         }
                     }
                 }
@@ -153,6 +177,10 @@ extension HomeVC: MKMapViewDelegate {
         
         return nil
         
+    }
+    
+    func mapView(_ mapView: MKMapView, regionWillChangeAnimated animated: Bool) {
+        centMapBtn.fadeTo(alphaValue: 1.0, withDuration: 0.2)
     }
     
     
