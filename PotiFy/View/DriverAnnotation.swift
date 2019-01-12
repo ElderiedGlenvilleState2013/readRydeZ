@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 import UIKit
-import Firebase
+import CoreLocation
 
 
 class DriverAnnotation: NSObject, MKAnnotation {

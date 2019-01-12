@@ -30,6 +30,7 @@
 		DAB4FA8121D9AEB3009D8D31 /* DataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FA8021D9AEB3009D8D31 /* DataService.swift */; };
 		DAB4FA8321D9BCAD009D8D31 /* AuthService.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAB4FA8221D9BCAD009D8D31 /* AuthService.swift */; };
 		DAC1409921D95FF400019F39 /* LoginVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DAC1409821D95FF400019F39 /* LoginVC.swift */; };
+		DAFFBDBB21E8315600183EE7 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DAFFBDBA21E8315600183EE7 /* MapKit.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -60,6 +61,7 @@
 		DAB4FA8021D9AEB3009D8D31 /* DataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataService.swift; sourceTree = "<group>"; };
 		DAB4FA8221D9BCAD009D8D31 /* AuthService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthService.swift; sourceTree = "<group>"; };
 		DAC1409821D95FF400019F39 /* LoginVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginVC.swift; sourceTree = "<group>"; };
+		DAFFBDBA21E8315600183EE7 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -67,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DAFFBDBB21E8315600183EE7 /* MapKit.framework in Frameworks */,
 				43D742EA74F4BBDA66F229AF /* Pods_PotiFy.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -173,6 +176,7 @@
 		EC6A9CBA0E37FCB591EA227D /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				DAFFBDBA21E8315600183EE7 /* MapKit.framework */,
 				95EA887B40AEA309DF4613D0 /* Pods_PotiFy.framework */,
 			);
 			name = Frameworks;
@@ -221,6 +225,11 @@
 				TargetAttributes = {
 					DA473A7E21990FBF0075DE23 = {
 						CreatedOnToolsVersion = 10.0;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};

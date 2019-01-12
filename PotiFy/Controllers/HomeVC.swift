@@ -29,7 +29,7 @@ class HomeVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //loadDriverAnnotationsFromFB()
+        loadDriverAnnotationsFromFB()
         
         manager = CLLocationManager()
         manager?.desiredAccuracy = kCLLocationAccuracyBest
@@ -41,6 +41,8 @@ class HomeVC: UIViewController {
             self.loadDriverAnnotationsFromFB()
         }
         */
+        
+        
         
         checkLocationAuthStatus()
         centerMapOnUserLocation()
@@ -69,51 +71,27 @@ class HomeVC: UIViewController {
     }
     
     func loadDriverAnnotationsFromFB() {
-        DataService.instance.REF_DRIVERS.observeSingleEvent(of: .value, with: { (snapshot) in
+        DataService.instance.REF_BASE.database.reference()
+        DataService.instance.REF_DRIVERS.observe(.value, with: { (snapshot) in
             if let driverSnapshot = snapshot.children.allObjects as? [DataSnapshot] {
-                for drivers in driverSnapshot {
-                    if drivers.hasChild("userIsDriver") {
-                        if drivers.hasChild("coordinate") {
-                            if drivers.childSnapshot(forPath: "isPickupModeEnabled").value as? Bool == true {
-                                if let driverDict = drivers.value as? Dictionary<String, AnyObject> {
-                                    let coordinatArray = driverDict["coordinate"] as! NSArray
-                                    let driverCoordinate = CLLocationCoordinate2D(latitude: coordinatArray[0] as! CLLocationDegrees, longitude: coordinatArray[1] as! CLLocationDegrees)
-                                    
-                                    let annotation = DriverAnnotation(coordinate: driverCoordinate, withKey: drivers.key)
-                                    
-                                    var driverIsVisible: Bool {
-                                        return self.mapView.annotations.contains(where: { (annotation) -> Bool in
-                                            if let driverAnnotation = annotation as? DriverAnnotation {
-                                                if driverAnnotation.key == drivers.key {
-                                                    driverAnnotation.update(annotationPosition: driverAnnotation, withCoordinate: driverCoordinate)
-                                                    return true
-                                                    
-                                                }
-                                                
-                                                
-                                                
-                                            }
-                                            return false
-                                        })
-                                        
-                                    }
-                                    if !driverIsVisible {
-                                        self.mapView.addAnnotation(annotation)
-                                    }
-                                    
-                                }
+                for driver in driverSnapshot {
+                    if driver.hasChild("coordinate") {
+                        if driver.childSnapshot(forPath: "isPickupModeEnabled").value as? Bool == true {
+                            if let driverDict = driver.value as? Dictionary<String, AnyObject> {
+                                let coordinateArray = driverDict["coordinate"] as! NSArray
+                                let driverCoordinate = CLLocationCoordinate2DMake(coordinateArray[0] as! CLLocationDegrees, coordinateArray[1] as! CLLocationDegrees)
                                 
+                                let annotation = DriverAnnotation(coordinate: driverCoordinate, withKey: driver.key)
+                                
+                                self.mapView.addAnnotation(annotation)
                             }
                         }
                     }
-                    
                 }
             }
         })
-    }
     
-    
-    
+}
     
     //func to center location
     func centerMapOnUserLocation() {
@@ -122,7 +100,7 @@ class HomeVC: UIViewController {
         mapView.setRegion(coordinateRegion, animated: true)
     }
     
-    //loaddriver annotation function
+    
    
     
     
@@ -162,6 +140,7 @@ extension HomeVC: MKMapViewDelegate {
         UpdateService.instance.updateUserLocation(withCoordinate: userLocation.coordinate)
         UpdateService.instance.updateDriverLocation(withCoordinate: userLocation.coordinate)
     }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         if let annotation = annotation as? DriverAnnotation {
             let identifier = "driver"
