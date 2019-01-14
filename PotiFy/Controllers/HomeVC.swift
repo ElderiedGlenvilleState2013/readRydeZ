@@ -14,6 +14,8 @@ import Firebase
 
 class HomeVC: UIViewController {
 
+    
+    
     @IBOutlet weak var centMapBtn: UIButton!
     
     @IBOutlet weak var destinationTextField: UITextField!
@@ -24,7 +26,7 @@ class HomeVC: UIViewController {
     
     var tableView = UITableView()
     
-    let currentUserID = Auth.auth().currentUser?.uid
+    
     
     var regionRadius: CLLocationDistance = 1000
     //regional radius
@@ -35,9 +37,15 @@ class HomeVC: UIViewController {
     var delegate: CenterVCDelegate?
     //centerDelegate var
     
+    
+    
     //ViewDidload func
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        var currentUserID = Auth.auth().currentUser?.uid
+
+        //let currentUserID = Auth.auth().currentUser?.uid
         
         destinationTextField.delegate = self
         
@@ -47,6 +55,7 @@ class HomeVC: UIViewController {
         manager?.desiredAccuracy = kCLLocationAccuracyBest
         manager?.startUpdatingLocation()
         manager?.delegate = self
+        
         
         
         DataService.instance.REF_DRIVERS.observe(.value) { (snapshot) in
@@ -339,14 +348,14 @@ extension HomeVC: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         let passengerCoordinate = manager?.location?.coordinate
-        let passengerAnnotation = PassengerAnnotation(coordinate: passengerCoordinate!, key: currentUserID!)
+        let passengerAnnotation = PassengerAnnotation(coordinate: passengerCoordinate!, key: (Auth.auth().currentUser?.uid)!)
         mapView.addAnnotation(passengerAnnotation)
         
         destinationTextField.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
         
         let selectedMapItem = matchingItems[indexPath.row]
         
-        DataService.instance.REF_USERS.child(currentUserID!).updateChildValues(["tripCoordinate": [selectedMapItem.placemark.coordinate.latitude, selectedMapItem.placemark.coordinate.longitude]])
+        DataService.instance.REF_USERS.child((Auth.auth().currentUser?.uid)!).updateChildValues(["tripCoordinate": [selectedMapItem.placemark.coordinate.latitude, selectedMapItem.placemark.coordinate.longitude]])
         
         animateTableView(shouldShow: false)
  
